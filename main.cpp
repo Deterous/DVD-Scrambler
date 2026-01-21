@@ -76,11 +76,13 @@ int main(int argc, char* argv[]) {
             num_bytes += file.gcount();
         }
 
+        uint32_t psn = ((uint32_t)sector[1] << 16) | ((uint32_t)sector[2] << 8) | ((uint32_t)sector[3]);
+
         // Calculate XOR table offset (Nintendo)
         if (!nintendo)
-            offset = (count >> 4 & 0xF) * SECTOR_SIZE;
+            offset = (psn >> 4 & 0xF) * SECTOR_SIZE;
         if (nintendo && count >= 16)
-            offset = ((id ^ (count >> 4 & 0xF)) + 7.5) * SECTOR_SIZE;
+            offset = ((id ^ (psn >> 4 & 0xF)) + 7.5) * SECTOR_SIZE;
         else
             offset = 7.5 * SECTOR_SIZE;
 
@@ -123,3 +125,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
