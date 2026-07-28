@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
         // Calculate XOR table offset (Nintendo)
         if (!nintendo)
             offset = (psn >> 4 & 0xF) * SECTOR_SIZE;
-        if (nintendo && count >= 16)
+        else if (nintendo && count >= 16)
             offset = ((id ^ (psn >> 4 & 0xF)) + 7.5) * SECTOR_SIZE;
         else
             offset = 7.5 * SECTOR_SIZE;

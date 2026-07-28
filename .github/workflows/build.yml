@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact: dvd-scramble
+          - os: windows-latest
+            artifact: dvd-scramble.exe
+          - os: macos-latest
+            artifact: dvd-scramble
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}-${{ matrix.os }}
+          path: |
+            build/Release/${{ matrix.artifact }}
+            build/${{ matrix.artifact }}
